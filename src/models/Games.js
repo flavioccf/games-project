@@ -2,18 +2,15 @@ const { Schema, model } = require("mongoose");
 
 const GameSchema = new Schema(
   {
-    title: {
+    name: {
       type: String,
-      required: true,
+      required: true
     },
-    otherTitles: [String],
-    developers: [String],
-    publishers: [String],
-    genres: [String],
-    firstReleased: Date,
-    japanRelease: Date,
-    usaRelease: Date,
-    euroRelease: Date,
+    appid: {
+      type: Number,
+      required: true,
+      unique: true
+    },
   },
   { strict: false, collection: "games" }
 );
@@ -29,10 +26,8 @@ module.exports = {
       const regex = new RegExp(`.*${q}.*`, "i");
       const searchQuery = {
         $or: [
-          { title: regex },
-          { otherTitles: regex },
-          { publishers: regex },
-          { developers: regex },
+          { name: regex },
+          { appid: regex }
         ],
       };
       query.find(searchQuery);
@@ -50,10 +45,8 @@ module.exports = {
       const regex = new RegExp(`.*${q}.*`, "i");
       const searchQuery = {
         $or: [
-          { title: regex },
-          { otherTitles: regex },
-          { publishers: regex },
-          { developers: regex },
+          { name: regex },
+          { appid: regex }
         ],
       };
       query.find(searchQuery);
@@ -63,6 +56,15 @@ module.exports = {
   store: (data) => {
     const game = new Game(data);
     return game.save();
+  },
+  bulkDelete: (data) => {
+    return Game.deleteMany(data);
+  },
+  bulkCreate: (dataArray) => {
+    return Game.insertMany(dataArray, { ordered: false }, (error, docs) => {
+      if(error) return error;
+      return docs;
+    })
   },
   update: (id, data, options = { new: true }) => {
     return Game.findByIdAndUpdate(id, data, options);

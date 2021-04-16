@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cookieParset = require("cookie-parser");
 dotenv.config();
+const getSteamGames = require("../src/models/seeds/import");
 
 const connect = require("./models/index");
 const gamesRouter = require("./routes/games");
