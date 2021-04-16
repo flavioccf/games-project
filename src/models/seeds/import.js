@@ -26,4 +26,4 @@ const importGames = async () => {
   }
 };
 
-importGames();
+// importGames();
